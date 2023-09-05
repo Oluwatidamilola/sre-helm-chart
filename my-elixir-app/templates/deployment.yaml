@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-elixir-app-deployment
+  namespace: stord
+  labels:
+    app: my-elixir-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-elixir-app
+  template:
+    metadata:
+      labels:
+        app: my-elixir-app
+    spec:
+      containers:
+        - name: my-elixir-app-container
+          image: ghcr.io/stordco/sre-technical-challenge:latest
+          ports:
+            - name: http
+              containerPort: 4000
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://postgres:password@sre-db-postgresql/sre-technical-challenge"
+            - name: PHX_HOST
+              value: "my-elixir-app-service.stord"
+            - name: SECRET_KEY_BASE
+              value: "GWks+00R99rp4iCigXEDAP7WRQXFiTImOP0vIUmFyaNj1DGDXsMvEfSXtb7ITMKC"
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1

@@ -1,0 +1,34 @@
+namespace: stord
+
+image:
+  repository: ghcr.io/stordco/sre-technical-challenge
+  tag: latest
+
+env:
+  DATABASE_URL: postgresql://postgres:password@sre-db-postgresql-services:5432/sre-technical-challenge
+  POOL_SIZE: "10"
+  SECRET_KEY_BASE: GWks+00R99rp4iCigXEDAP7WRQXFiTImOP0vIUmFyaNj1DGDXsMvEfSXtb7ITMKC
+  PHX_HOST: SREPhoenixApp.com
+  PORT: 4000
+
+service:
+  type: LoadBalancer
+  port: 80
+
+readinessProbe:
+  httpGet:
+    path: /_health
+    port: http
+
+livenessProbe:
+  httpGet:
+    path: /_health
+    port: http
+
+ingress:
+  enabled: true
+  hosts:
+    - host: SREPhoenixApp.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
