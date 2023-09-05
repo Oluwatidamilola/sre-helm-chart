@@ -54,8 +54,8 @@ For the database:
 
 kubectl port-forward svc/sre-db-postgresql 55432:5432
 psql postgresql://postgres:password@127.0.0.1:55432/sre-technical-challenge
-For the application:
 
+For the application:
 kubectl port-forward svc/sre-app-sre-technical-challenge 8080:80
 Visit http://localhost:8080/todos in your browser.
 
